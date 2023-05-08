@@ -26,7 +26,9 @@ let notes = [
     }
   ]
 
+  // 定义事件处理程序，处理向 / 发送的 HTTP 请求
 app.get('/', (req, resp) => {
+   // 参数是一个字符串，Express 自动将 Content-Type 头的值设置为 text/html。响应的状态代码默认为 200
     resp.send('<h1>Hello Node</h1>')
 })
 
@@ -54,7 +56,7 @@ app.delete('/api/notes/:id', (req, resp) => {
   resp.status(204).end()
 })
 
-const getId = () => {
+const generateId = () => {
   const maxId = notes.length > 0 ? Math.max(...notes.map(note => note.id)) : 0
 
   return maxId + 1
@@ -73,7 +75,7 @@ app.post('/api/notes', (request, response) => {
     content: body.content,
     important: body.important || false,
     date: new Date(),
-    id: getId()
+    id: generateId()
   }
  
   notes.concat(note)
