@@ -1,89 +1,52 @@
-const express = require("express")
-const cors = require('cors')
+const express = require('express')
 const app = express()
 
-app.use(express.json())
-app.use(cors())
-
-let notes = [
-    {
-      id: 1,
-      content: "HTML is easy",
-      date: "2022-05-30T17:30:31.098Z",
-      important: true
-    },
-    {
-      id: 2,
-      content: "Browser can execute only Javascript",
-      date: "2022-05-30T18:39:34.091Z",
-      important: false
-    },
-    {
-      id: 3,
-      content: "GET and POST are the most important methods of HTTP protocol",
-      date: "2022-05-30T19:20:14.298Z",
-      important: true
-    }
-  ]
-
-  // 定义事件处理程序，处理向 / 发送的 HTTP 请求
-app.get('/', (req, resp) => {
-   // 参数是一个字符串，Express 自动将 Content-Type 头的值设置为 text/html。响应的状态代码默认为 200
-    resp.send('<h1>Hello Node</h1>')
-})
-
-app.get('/api/notes', (req, resp) => {
-    resp.json(notes)
-})
-
-app.get('/api/notes/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const note = notes.find(note => note.id === id)
-
-  if(note) {
-    response.json(note)
+const persons = [
+  {
+    id: 1,
+    name: "Arto Hellas",
+    number: 040-123456
+  },
+  {
+    id: 2,
+    name: "Ada Lovelace",
+    number: 39-44-5323523
+  },
+  {
+    id: 3,
+    name: "Dan Abramov",
+    number: 12-43-234345
+  },
+  {
+    id: 4,
+    name: "Mary Poppendieck",
+    number: 39-23-6423122
   }
+]
 
-  if(!note) {
-    response.status(404).end()
-  }
-  
+app.get('/api/persons', (req, resp) => {
+  resp.json(persons)
 })
 
-app.delete('/api/notes/:id', (req, resp) => {
+app.get('/api/info', (req, resp) => {
+  const time = new Date()
+  resp.send('phonebook has info 2 people, <br>' + time + 'starndard time')
+})
+
+app.get('/api/persons/:id', (req, resp) => {
   const id = Number(req.params.id)
-  notes = notes.filter(note => note.id !== id)
-  resp.status(204).end()
-})
-
-const generateId = () => {
-  const maxId = notes.length > 0 ? Math.max(...notes.map(note => note.id)) : 0
-
-  return maxId + 1
-}
-
-app.post('/api/notes', (request, response) => {
-  const body = request.body
-
-  if(!body.content) {
-    return response.status(400).json({
-      error: 'content missing'
-    })
+  
+  if(id) {
+    const person = persons.find(person => person.id === id)
+    resp.status(200).json(person)
   }
 
-  const note = {
-    content: body.content,
-    important: body.important || false,
-    date: new Date(),
-    id: generateId()
+  if(!id) {
+    return resp.status(404).end()
   }
- 
-  notes.concat(note)
-
-  response.json(note)
 })
 
-const PORT = 3001
+const PORT = 3002
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
+  console.log(`Server running on port ${PORT}`)
 })
