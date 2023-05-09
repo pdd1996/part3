@@ -246,6 +246,8 @@ app.listen(PORT, () => {
 })
 ```
 
-Mogodb
+Mogodb   WuHv9553iLRCaCBW
 
-WuHv9553iLRCaCBW
+#### app.use(express.json())
+
+json-parser 从请求中获取原始数据，这些数据存储在 request 对象中，将其解析为一个 JavaScript 对象，并将其作为一个新的属性 body 分配给 request 对象。
