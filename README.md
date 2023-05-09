@@ -81,6 +81,7 @@ app.listen(PORT, () => {
 const express = require("express")
 const app = express()
 
+// 如果没有 json-parser，body 属性将是未定义的。json-parser 的功能是将请求的 JSON 数据转化为 JavaScript 对象，然后在调用路由处理程序之前将其附加到 request 对象的 body 属性。
 app.use(express.json())
 
 let notes = [
@@ -245,3 +246,8 @@ app.listen(PORT, () => {
 })
 ```
 
+Mogodb
+
+pdd337816464
+
+WuHv9553iLRCaCBW
