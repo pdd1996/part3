@@ -394,3 +394,10 @@ app.listen(PORT, () => {
 })
 ```
 
+![fullstack content](https://fullstackopen.com/static/6f33425b60b49278d57df7e62f81a32c/db910/101.png)
+
+与在开发环境中运行应用时不同，现在所有东西都在同一个节点/express-backend中，该节点在localhost:3001中运行。当浏览器进入页面时，文件*index.html*被渲染。这导致浏览器获取React应用的产品版本。一旦开始运行，它就从localhost:3001/api/notes这个地址获取json-data。
+
+#### 调试
+
+当bug发生时，*最糟糕的策略*是继续写代码。这将保证你的代码很快就会出现更多的bug，而调试它们将更加困难。丰田生产系统中的[停止和修复](http://gettingtolean.com/toyota-principle-5-build-culture-stopping-fix/)原则在这种情况下也是非常有效的。
