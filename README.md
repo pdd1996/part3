@@ -246,8 +246,6 @@ app.listen(PORT, () => {
 })
 ```
 
-Mogodb   WuHv9553iLRCaCBW
-
 #### app.use(express.json())
 
 json-parser 从请求中获取原始数据，这些数据存储在 request 对象中，将其解析为一个 JavaScript 对象，并将其作为一个新的属性 body 分配给 request 对象。
@@ -401,3 +399,42 @@ app.listen(PORT, () => {
 #### 调试
 
 当bug发生时，*最糟糕的策略*是继续写代码。这将保证你的代码很快就会出现更多的bug，而调试它们将更加困难。丰田生产系统中的[停止和修复](http://gettingtolean.com/toyota-principle-5-build-culture-stopping-fix/)原则在这种情况下也是非常有效的。
+
+#### mongo.js
+
+```js
+const mongoose = require('mongoose')
+
+if (process.argv.length < 3) {
+  console.log('Please provide the password as an argument: node mongo.js <password>')
+  process.exit(1)
+}
+
+const password = process.argv[2]
+
+const url = `mongodb+srv://fullstack:${password}@cluster0.0xuryjj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
+
+mongoose.connect(url)
+
+const noteSchema = new mongoose.Schema({
+  content: String,
+  date: Date,
+  important: Boolean,
+})
+
+const Note = mongoose.model('Note', noteSchema)
+
+const note = new Note({
+  content: 'HTML is Easy',
+  date: new Date(),
+  important: true,
+})
+
+note.save().then(result => {
+  console.log('note saved!')
+  mongoose.connection.close()
+})
+
+// SRYRxo0Ak45Rgrhp
+```
+
