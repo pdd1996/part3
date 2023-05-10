@@ -1,5 +1,24 @@
 const express = require('express')
+const fs = require('fs')
+const morgan = require('morgan')
+const path = require('path')
+var uuid = require('node-uuid')
+// var rfs = require('rotating-file-stream')
+
+morgan.token('id', function getId (req) {
+  return req.id
+})
+
 const app = express()
+
+// var accessLogStream = rfs.createStream("file.log", {
+//   size: "10M", // rotate every 10 MegaBytes written
+//   interval: "1d", // rotate daily
+//   compress: "gzip", // compress rotated files
+//   path: path.join(__dirname, 'log')
+// });
+// var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
+
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
@@ -13,8 +32,28 @@ const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
+function assignId (req, res, next) {
+  req.id = uuid.v4()
+  next()
+}
+
+app.use(assignId)
+app.use(morgan(':id :method :url :response-time'))
+
 app.use(express.json())
 app.use(requestLogger)
+// app.use(morgan('combined', { stream: accessLogStream }))
+
+// log only 4xx and 5xx responses to console
+app.use(morgan('dev', {
+  skip: function (req, res) { return res.statusCode < 400 }
+}))
+
+// log all requests to access.log
+app.use(morgan('common', {
+  stream: fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
+}))
+
 
 let notes = [
   {
